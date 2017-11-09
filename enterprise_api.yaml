@@ -1,0 +1,119 @@
+swagger: "2.0"
+info:
+  version: "v2"
+  title: "Enterprise API (Applications)"
+host: "api.pushbots.com"
+
+schemes:
+- "http"
+paths:
+  /2/getApplication:
+    get:
+      tags:
+      - "Application"
+      description: "Get Application data by Id."
+      operationId: "getApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "x-pushbots-appid"
+        type: string
+        description: "applicaiton Id for which the device belongs, can be found in application settings in dashboard."
+        required: true
+      - in: "header"
+        name: "x-pushbots-token"
+        type: string
+        description: "API Access token found in user settings."
+        required: true
+      responses:
+        200:
+          description: "Success: {\"title\":\"TITLE\",\"id\":\"ID\",\"secret\":\"SECRET\",\"devices\":{\"t\":0,\"ios\":0,\"android\":0,\"chrome\":0,\"firefox\":0}}"
+  /2/getApps:
+    get:
+      tags:
+      - "Application"
+      description: "Get list of applications."
+      operationId: "getApps"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "x-pushbots-token"
+        type: string
+        description: "API Access token found in user settings."
+        required: true
+      responses:
+        200:
+          description: "Success: [{\"title\":\"TITLE\",\"id\":\"ID\",\"secret\":\"SECRET\",\"devices\":{\"t\":0,\"ios\":0,\"android\":0,\"chrome\":0,\"firefox\":0}}, {\"title\":\"TITLE\",\"id\":\"ID\",\"secret\":\"SECRET\",\"devices\":{\"t\":0,\"ios\":0,\"android\":0,\"chrome\":0,\"firefox\":0}}]"
+
+  /2/createApplication:
+    post:
+      tags:
+      - "Application"
+      description: "Create new application."
+      operationId: "createApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "x-pushbots-api-token"
+        type: string
+        description: "API Access token found in user settings."
+        required: true
+      - in: "header"
+        name: "Content-Type"
+        type: string
+        description: "application/json"
+        required: true
+      - in: "body"
+        name: "body"
+        schema:
+          $ref: "#/definitions/CreateApp"
+
+      responses:
+        200:
+          description: "Success: {\"id\":\"58721e311c018fcda45cc1f6\",\"secret\":\"b3649778e58efcf2210ac918b0ab3bbd\",\"title\":\"Application title\"}"
+
+  /2/deleteApplication/{APP_ID}:
+    delete:
+      tags:
+      - "Application"
+      description: "Remove application"
+      operationId: "deleteApps"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "x-pushbots-token"
+        type: string
+        description: "API Access token found in user settings."
+        required: true
+      - in: "path"
+        name: "APP_ID"
+        type: string
+        description: "The Application Id required for removing"
+        required: true
+
+      responses:
+        200:
+          description: "Success: {\"deleted\": true}}"
+
+
+definitions:
+  CreateApp:
+    type: "object"
+    required:
+    - "title"
+    properties:
+      title:
+        type: "string"
+        description: "Application title, must be unique."
