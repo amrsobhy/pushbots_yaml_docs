@@ -45,7 +45,7 @@ paths:
       put:
         tags:
         - "subscriptions"
-        description: "Creates new subscription object, it should be called once device token is available to register the device on PushBots for the first time."
+        description: "Update subscription object, must include at least 1 parameter to update. (last session date and sessions count wil be updated with this method)."
         operationId: "updateSub"
         consumes:
         - "application/json"
@@ -78,6 +78,30 @@ paths:
         responses:
           200:
             description: "Updated: {_id: 56d0a0deaa760e1711a44e18,sessions: 26,last_session: 2016-02-26T19:01:48.662Z}"
+
+
+      get:
+        tags:
+        - "subscriptions"
+        description: "Retrieve Subscription."
+        operationId: "getSub"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "header"
+          name: "x-pushbots-appid"
+          type: string
+          description: "applicaiton Id for which the device belongs, can be found in application settings in dashboard."
+          required: true
+
+        responses:
+          200:
+            description: "Updated: {appID : 583be4ef357e71cd090041a8, token : ca8d88f2e3299cedd8c770fc051b8b19a18bf62b8fdd1c202d6d738bef069094, sessions : 38, m : { jb : false, lib : 2.0.4, l : de_EG, appv : 1.0, r : 640x1136, d : iPhone6,2, osv : 10.1.1 }, ccode : EG, pp : 2, tz : 7200, ls : ISODate(2016-12-25T19:08:35.919Z), platform : 0, __v : 0, badge : 72, alias : test }"
+          401:
+            description: "Failed: Device not found"
+
 
 
 
