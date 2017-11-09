@@ -1,0 +1,23 @@
+{
+  "name": "yaml_docs",
+  "version": "1.0.0",
+  "description": "pushbots_docs for swagger in yaml and json",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MuhamadOmr/pushbots_yaml_docs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MuhamadOmr/pushbots_yaml_docs/issues"
+  },
+  "homepage": "https://github.com/MuhamadOmr/pushbots_yaml_docs#readme",
+  "dependencies": {
+    "connect": "^3.6.5",
+    "serve-static": "^1.13.1",
+  }
+}

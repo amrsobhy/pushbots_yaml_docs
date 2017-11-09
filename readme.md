@@ -1,1 +1,1 @@
-pushbots_docs for swagger in yaml and json
+pushbots_docs for swagger in yaml and json with local server for rendering
