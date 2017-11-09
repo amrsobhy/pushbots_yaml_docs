@@ -104,7 +104,7 @@ paths:
       delete:
         tags:
         - "subscriptions"
-        description: "Retrieve Subscription."
+        description: "Delete Subscription from PushBots."
         operationId: "deleteSub"
         consumes:
         - "application/json"
@@ -129,7 +129,7 @@ paths:
     post:
       tags:
       - "Devices"
-      description: "Creates new subscription object, it should be called once device token is available to register the device on PushBots for the first time."
+      description: "Push a notification to a single device"
       operationId: "pushOne"
       consumes:
       - "application/json"
@@ -156,6 +156,41 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/PushDevice"
+      responses:
+        200:
+          description: "Success: \"sent\" "
+
+  /push/all:
+    post:
+      tags:
+      - "Devices"
+      description: "Batch push notification"
+      operationId: "pushBatch"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "x-pushbots-appid"
+        type: string
+        description: "applicaiton Id for which the device belongs, can be found in application settings in dashboard."
+        required: true
+      - in: "header"
+        name: "x-pushbots-secret"
+        type: string
+        description: "applicaiton Secret for which the device belongs, can be found in application settings in dashboard."
+        required: true
+      - in: "header"
+        name: "Content-Type"
+        type: string
+        description: "application/json"
+        required: true
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PushBatchDevices"
       responses:
         200:
           description: "Success: \"sent\" "
@@ -320,6 +355,40 @@ definitions:
       badge:
         type: "integer"
         description: "Notification badge for iOS only e.g. \"+1\""
+      payload:
+        example:
+          {}
+        description: "Notification payload .. Type: JSON"
+
+
+  PushBatchDevices:
+    type: "object"
+    required:
+    - "msg"
+    - "platform"
+    properties:
+      msg:
+        type: "string"
+        description: Notification message
+      platform:
+        type: "array"
+        items:
+          type: "integer"
+        description: "Array with the type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+      sound:
+        type: "string"
+        description: "Notification sound"
+      badge:
+        type: "integer"
+        description: "Notification badge for iOS only e.g. \"+1\""
+      alias:
+        type: "string"
+        description: "alias to access device data without tokens and it must be unique for every app e.g. username ,email ..etc"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+        description: "Send notifications by tags"
       payload:
         example:
           {}
