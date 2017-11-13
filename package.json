@@ -17,11 +17,8 @@
   },
   "homepage": "https://github.com/MuhamadOmr/pushbots_yaml_docs#readme",
   "dependencies": {
-    "connect": "^3.6.5",
     "express": "^4.16.2",
     "path": "^0.12.7",
-    "restify": "^6.3.2",
-    "restify-router": "^0.5.0",
     "serve-static": "^1.13.1"
   }
 }
