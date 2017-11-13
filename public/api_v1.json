@@ -1,0 +1,1837 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v2",
+    "title": "REST API (Devices)"
+  },
+  "host": "api.pushbots.com",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/register": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Add new device to databse",
+        "operationId": "regDevice",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated: {\"_id\": \"56d0a0deaa760e1711a44e18\"}"
+          },
+          "201": {
+            "description": "Created: {\"_id\": \"56d0a0deaa760e1711a44e18\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application ID is invalid.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Device token parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/batch": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Insert up to 500 devices into database.",
+        "operationId": "regDevices",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DevicesReg"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success: {}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application ID is invalid.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Tokens parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/del": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Remove deivce from database.",
+        "operationId": "delDevice",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceUnReg"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application ID is invalid.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Device token parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/all": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Retrieve All Device Tokens data. ",
+        "operationId": "getAll",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {[\"token\": \"56d0a0deaa760e1711a44e18\" , \"token\": \"56d0a0deaa760e1711a44e19\" ]}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/count": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "GET Device Tokens count.",
+        "operationId": "getCount",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "platform",
+            "type": "integer",
+            "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {\"count\":500}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Platform parameter is missing or invalid.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/one": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Retrieve Single device data.",
+        "operationId": "getone",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "token",
+            "type": "string",
+            "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {\"token\":56d0a0deaa760e1711a44e18 ,\"platform\":0}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Device token parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/deviceToken/alias": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "GET Device count by alias.",
+        "operationId": "getCountbyalias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {\"devices_count\":500}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Alias parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag/expiry": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Time device tag.",
+        "operationId": "timeTag",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceTimeTag"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success: {\"message\" : \"Tag schedule created/updated.\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Date parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Update device tag.",
+        "operationId": "deviceTag",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceTag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Device token or Alias parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tags/update": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Update device tags add/remove.",
+        "operationId": "updateTags",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceTagsUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {\"message\": \"Tags updated\"}"
+          },
+          "202": {
+            "description": " {\"message\": \"Device not found!\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"tags_add parameter must be an array.\"}"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "set device tags.",
+        "operationId": "setTags",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceSetTags"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Tags parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/alias/del": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "remove device's alias",
+        "operationId": "remAlias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/removeDeviceAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {\"removed\" : {\"_id\": 14515514}}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Alias parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag/alias": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "update tags by querying alias.",
+        "operationId": "updateTagsbyAlias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceUpdateTagsByAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No devices found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Tags parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag/one/alias": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "update One tag by querying alias.",
+        "operationId": "updateOneTagbyAlias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceUpdateOneTagByAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No devices found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Tag parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag/one/alias/del": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Untag by querying alias.",
+        "operationId": "UnTagbyAlias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceUpdateOneTagByAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No devices found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Tag parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/tag/all": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Tag all devices",
+        "operationId": "tagAll",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tagAllDevices"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No devices found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application Id and/or Secret unauthorized.\"}"
+          }
+        }
+      }
+    },
+    "/tag/del": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Delete device tag.",
+        "operationId": "delTags",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/delTag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Tag parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/alias": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Update/set device alias.",
+        "operationId": "setAlias",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateAlias"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"Alias parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/debug": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "update the debug value",
+        "operationId": "setDebug",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateDebug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application ID is invalid.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Device token parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/geo": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "update the geo for a device",
+        "operationId": "setGeo",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/geoUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "401": {
+            "description": "InvalidCredentials: {\"code\": \"InvalidCredentials\",\"message\":\"Application ID is invalid.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"message\":\"Lat and lng parameters are required.\"}"
+          }
+        }
+      }
+    },
+    "/activate": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Activate notification type.",
+        "operationId": "Active",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateActive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"active parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/deactivate": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "description": "Deactivate notification type.",
+        "operationId": "deactive",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "description": "application/json",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateActive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          },
+          "202": {
+            "description": " {\"message\": \"No device found\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"Authentication headers not found.\"}"
+          },
+          "409": {
+            "description": "MissingParameter: {\"code\": \"MissingParameter\",\"error\":\"active parameter is required.\"}"
+          }
+        }
+      }
+    },
+    "/apps/list": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "description": "Retrieve All Apps of user. ",
+        "operationId": "getAllapps",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-uid",
+            "type": "string",
+            "description": "uid (user id) , can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-apikey",
+            "type": "string",
+            "description": "api key the user have, can be found in application settings in dashboard.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {[{\"id\": \"56d0a0deaa760e1711a44e18\" , \"secret\": \"85896\" } ,{\"id\": \"56d0a0dss60e1711a44e18\" , \"secret\": \"85776\" }]}"
+          },
+          "202": {
+            "description": "Success: {\"message\" : \"No Apps found.\"}"
+          },
+          "400": {
+            "description": "InvalidHeader: {\"code\": \"InvalidHeader\",\"message\":\"API key is invalid.\"}"
+          }
+        }
+      }
+    },
+    "/push/all": {
+      "post": {
+        "tags": [
+          "Push"
+        ],
+        "description": "Push to all devices with specific platform ",
+        "operationId": "pushAll",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pushAll"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          }
+        }
+      }
+    },
+    "/push/one": {
+      "post": {
+        "tags": [
+          "Push"
+        ],
+        "description": "Send notifications to Single Device ",
+        "operationId": "pushOne",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-pushbots-appid",
+            "type": "string",
+            "description": "applicaiton Id for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "x-pushbots-secret",
+            "type": "string",
+            "description": "applicaiton Secret for which the device belongs, can be found in application settings in dashboard.",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pushOne"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: {}"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "pushOne": {
+      "type": "object",
+      "required": [
+        "platform",
+        "msg",
+        "token"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "msg": {
+          "type": "string",
+          "description": "the message that will be pushed to the devices"
+        },
+        "token": {
+          "type": "string",
+          "description": "token of the device"
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    },
+    "pushAll": {
+      "type": "object",
+      "required": [
+        "platform",
+        "msg"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "msg": {
+          "type": "string",
+          "description": "the message that will be pushed to the devices"
+        }
+      }
+    },
+    "UpdateActive": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "token",
+        "active"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "active": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "active array of notifications."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username"
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        }
+      }
+    },
+    "geoUpdate": {
+      "type": "object",
+      "required": [
+        "token",
+        "platform",
+        "lng",
+        "lat"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        },
+        "lat": {
+          "type": "integer",
+          "description": "latitude value"
+        },
+        "lng": {
+          "type": "integer",
+          "description": "lingtude value"
+        }
+      }
+    },
+    "updateDebug": {
+      "type": "object",
+      "required": [
+        "token",
+        "platform",
+        "debug"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        },
+        "debug": {
+          "type": "string",
+          "description": "Update debug field , the debug value for the device 0 or 1"
+        }
+      }
+    },
+    "UpdateAlias": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "token",
+        "current_alias"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username you want to update."
+        },
+        "current_alias": {
+          "type": "string",
+          "description": "current device alias or username."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        }
+      }
+    },
+    "delTag": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "token",
+        "tag"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        },
+        "tag": {
+          "type": "string",
+          "description": "device tag."
+        }
+      }
+    },
+    "tagAllDevices": {
+      "type": "object",
+      "required": [
+        "platform",
+        "tag"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "tag": {
+          "type": "string",
+          "description": "device tag."
+        }
+      }
+    },
+    "DeviceUpdateTagsByAlias": {
+      "type": "object",
+      "required": [
+        "alias",
+        "tags"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of the tags to which a device is currently subscribed."
+        }
+      }
+    },
+    "DeviceUpdateOneTagByAlias": {
+      "type": "object",
+      "required": [
+        "alias",
+        "tag"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "tag": {
+          "type": "string",
+          "description": "devices tag."
+        }
+      }
+    },
+    "removeDeviceAlias": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        }
+      }
+    },
+    "DeviceSetTags": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "tags",
+        "token"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of the tags to which a device is currently subscribed."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        }
+      }
+    },
+    "DeviceTagsUpdate": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "tag",
+        "token",
+        "tags_add"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "tag": {
+          "type": "string",
+          "description": "device tag."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        },
+        "tags_add": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "you can't use both tags_add and tags_remove toghether , only one of them is required"
+        },
+        "tags_remove": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "DeviceTag": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias",
+        "tag",
+        "token"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "tag": {
+          "type": "string",
+          "description": "device tag."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        }
+      }
+    },
+    "DeviceTimeTag": {
+      "type": "object",
+      "required": [
+        "tag",
+        "date"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "description": "tag for the devices."
+        },
+        "date": {
+          "type": "string",
+          "description": "Date string format"
+        }
+      }
+    },
+    "DeviceAlias": {
+      "type": "object",
+      "required": [
+        "platform",
+        "alias"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        }
+      }
+    },
+    "DeviceUnReg": {
+      "type": "object",
+      "required": [
+        "token",
+        "platform"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        }
+      }
+    },
+    "DevicesReg": {
+      "type": "object",
+      "required": [
+        "tokens",
+        "platform"
+      ],
+      "properties": {
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of the tokens from 1 to 500 devices."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of the tags to which a device is currently subscribed."
+        }
+      }
+    },
+    "Device": {
+      "type": "object",
+      "required": [
+        "token",
+        "platform"
+      ],
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "description": "Unique device Id."
+        },
+        "token": {
+          "type": "string",
+          "description": "The Apple or Google generated token used to deliver messages to the APNs or GCM push networks respectively."
+        },
+        "platform": {
+          "type": "integer",
+          "description": "The type of device, 0 for iOS devices, 1 for Android devices, 2 for Chrome users, 3 for firefox users."
+        },
+        "key": {
+          "type": "string",
+          "description": "The public key of the receiver (from the browser firefox and chrome only)."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of the tags to which a device is currently subscribed."
+        },
+        "timeZone": {
+          "type": "string",
+          "description": "The offset of the time zone from UTC, ignoring daylight savings time e.g. 7200."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device alias or username."
+        },
+        "countryCode": {
+          "type": "integer",
+          "description": "Country code to detect country generated by carrier."
+        },
+        "badge": {
+          "type": "string",
+          "description": "is a number field representing the last known application badge for iOS installations only."
+        },
+        "location": {
+          "type": "array",
+          "example": [
+            50,
+            30
+          ],
+          "items": {
+            "type": "integer"
+          }
+        },
+        "metrics": {
+          "$ref": "#/definitions/Metrics",
+          "description": "Object with device data for better analytics tracking. e.g. {\"appVersion\":\"1.1\",\"resolution\":\"396x240\",\"deviceModel\":\"Android 5.0.0 - API 21 - 768x1280\",\"locale\":\"en_US\",\"PushBotslibVersion\":\"3.0.1\",\"osVersion\":\"5.0\",\"carrier\":\"Vodafone\"}"
+        }
+      }
+    },
+    "Metrics": {
+      "type": "object",
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "example": "Vodafone",
+          "description": "device carrier e.g. Vodafone."
+        },
+        "osVersion": {
+          "type": "string",
+          "description": "9.1.2 for iOS/ 4.4.4 for Android.",
+          "example": "9.1.2"
+        },
+        "resolution": {
+          "type": "string",
+          "example": "396x240"
+        },
+        "appVersion": {
+          "type": "string",
+          "description": "your application versioning for iOS AppStore or Google playstore."
+        },
+        "locale": {
+          "type": "string",
+          "example": "en_US",
+          "description": "device language"
+        },
+        "PushBotslibVersion": {
+          "type": "string",
+          "description": "Pushbots library version used in library"
+        },
+        "jailbroken": {
+          "type": "boolean",
+          "description": "If the device is jailbroken or no"
+        }
+      }
+    }
+  }
+}
