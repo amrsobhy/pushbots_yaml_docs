@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "v2",
-    "title": "REST API (Devices)"
+    "title": "REST API V1"
   },
   "host": "api.pushbots.com",
   "schemes": [

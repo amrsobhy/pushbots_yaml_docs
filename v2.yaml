@@ -1,0 +1,557 @@
+swagger: '2.0'
+info:
+  version: v2
+  title: REST API V2
+host: api.pushbots.com
+schemes:
+  - http
+paths:
+  /2/getApplication:
+    get:
+      tags:
+        - Application
+      description: Get Application data by Id.
+      operationId: getApp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: x-pushbots-token
+          type: string
+          description: API Access token found in user settings.
+          required: true
+      responses:
+        '200':
+          description: >-
+            Success:
+            {"title":"TITLE","id":"ID","secret":"SECRET","devices":{"t":0,"ios":0,"android":0,"chrome":0,"firefox":0}}
+  /2/getApps:
+    get:
+      tags:
+        - Application
+      description: Get list of applications.
+      operationId: getApps
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-token
+          type: string
+          description: API Access token found in user settings.
+          required: true
+      responses:
+        '200':
+          description: >-
+            Success:
+            [{"title":"TITLE","id":"ID","secret":"SECRET","devices":{"t":0,"ios":0,"android":0,"chrome":0,"firefox":0}},
+            {"title":"TITLE","id":"ID","secret":"SECRET","devices":{"t":0,"ios":0,"android":0,"chrome":0,"firefox":0}}]
+  /2/createApplication:
+    post:
+      tags:
+        - Application
+      description: Create new application.
+      operationId: createApp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-api-token
+          type: string
+          description: API Access token found in user settings.
+          required: true
+        - in: header
+          name: Content-Type
+          type: string
+          description: application/json
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateApp'
+      responses:
+        '200':
+          description: >-
+            Success:
+            {"id":"58721e311c018fcda45cc1f6","secret":"b3649778e58efcf2210ac918b0ab3bbd","title":"Application
+            title"}
+  '/2/deleteApplication/{APP_ID}':
+    delete:
+      tags:
+        - Application
+      description: Remove application
+      operationId: deleteApps
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-token
+          type: string
+          description: API Access token found in user settings.
+          required: true
+        - in: path
+          name: APP_ID
+          type: string
+          description: The Application Id required for removing
+          required: true
+      responses:
+        '200':
+          description: 'Success: {"deleted": true}}'
+  /2/subscriptions:
+    post:
+      tags:
+        - subscriptions
+      description: >-
+        Creates new subscription object, it should be called once device token
+        is available to register the device on PushBots for the first time.
+      operationId: addSub
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: Content-Type
+          type: string
+          description: application/json
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/Subscription'
+      responses:
+        '200':
+          description: 'Updated: {"_id": "56d0a0deaa760e1711a44e18"}'
+        '201':
+          description: 'Created: {"_id": "56d0a0deaa760e1711a44e18"}'
+  '/2/subscriptions/{DEVICE_ID}':
+    put:
+      tags:
+        - subscriptions
+      description: >-
+        Update subscription object, must include at least 1 parameter to update.
+        (last session date and sessions count wil be updated with this method).
+      operationId: updateSub
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: Content-Type
+          type: string
+          description: application/json
+          required: true
+        - name: DEVICE_ID
+          in: path
+          type: string
+          description: >-
+            Valid Object Id, can be replaced with token ,The device Id or token
+            to update, it must include at least 1 parameter to update. The
+            application should store the object Id, in order to be able to
+            update device data or sessions. token can be used to update device
+            data, however it's always recommended to use device Id instead.
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateSubscription'
+      responses:
+        '200':
+          description: >-
+            Updated: {"_id": "56d0a0deaa760e1711a44e18,"sessions":
+            "26","last_session": "2016-02-26T19:01:48.662Z"}
+    get:
+      tags:
+        - subscriptions
+      description: Retrieve Subscription.
+      operationId: getSub
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+      responses:
+        '200':
+          description: >-
+            Updated: {"appID" : "583be4ef357e71cd090041a8", "token" :
+            "ca8d88f2e3299cedd8c770fc051b8b19a18bf62b8fdd1c202d6d738bef069094",
+            "sessions" : 38, "m" : { "jb" : false, "lib" : "2.0.4", "l" :
+            "de_EG", "appv" : "1.0", "r" : "640x1136", "d" : "iPhone6,2", "osv"
+            : "10.1.1" }, "ccode" : "EG", "pp" : 2, "tz" : "7200", "ls" :
+            ISODate("2016-12-25T19:08:35.919Z"), "platform" : "0"," __v" : 0,
+            "badg" : 72, "alias" : "test" }
+        '401':
+          description: 'Failed: "Device not found"'
+    delete:
+      tags:
+        - subscriptions
+      description: Delete Subscription from PushBots.
+      operationId: deleteSub
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+      responses:
+        '200':
+          description: 'Success:  {"deleted": true, "id": "56d0a0deaa760e1711a44e18"}'
+        '401':
+          description: 'Failed: {"deleted":false}'
+  /push/one:
+    post:
+      tags:
+        - Devices
+      description: Push a notification to a single device
+      operationId: pushOne
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: x-pushbots-secret
+          type: string
+          description: >-
+            applicaiton Secret for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: Content-Type
+          type: string
+          description: application/json
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/PushDevice'
+      responses:
+        '200':
+          description: 'Success: "sent" '
+  /push/all:
+    post:
+      tags:
+        - Devices
+      description: Batch push notification
+      operationId: pushBatch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-pushbots-appid
+          type: string
+          description: >-
+            applicaiton Id for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: x-pushbots-secret
+          type: string
+          description: >-
+            applicaiton Secret for which the device belongs, can be found in
+            application settings in dashboard.
+          required: true
+        - in: header
+          name: Content-Type
+          type: string
+          description: application/json
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/PushBatchDevices'
+      responses:
+        '200':
+          description: 'Success: "sent" '
+definitions:
+  Subscription:
+    type: object
+    required:
+      - uuid
+      - token
+      - platform
+    properties:
+      uuid:
+        type: string
+        description: Unique device Id.
+      token:
+        type: string
+        description: >-
+          The Apple or Google generated token used to deliver messages to the
+          APNs or GCM push networks respectively.
+      platform:
+        type: integer
+        description: >-
+          The type of device, 0 for iOS devices, 1 for Android devices, 2 for
+          Chrome users, 3 for firefox users.
+      key:
+        type: string
+        description: >-
+          The public key of the receiver (from the browser firefox and chrome
+          only).
+      tags:
+        type: array
+        items:
+          type: string
+        description: An array of the tags to which a device is currently subscribed.
+      timeZone:
+        type: string
+        description: >-
+          The offset of the time zone from UTC, ignoring daylight savings time
+          e.g. 7200.
+      alias:
+        type: string
+        description: device alias or username.
+      countryCode:
+        type: integer
+        description: Country code to detect country generated by carrier.
+      badge:
+        type: string
+        description: >-
+          is a number field representing the last known application badge for
+          iOS installations only.
+      location:
+        type: array
+        example:
+          - 50
+          - 30
+        items:
+          type: integer
+      metrics:
+        $ref: '#/definitions/DeviceData'
+        description: >-
+          Object with device data for better analytics tracking. e.g.
+          {"appVersion":"1.1","resolution":"396x240","deviceModel":"Android
+          5.0.0 - API 21 -
+          768x1280","locale":"en_US","PushBotslibVersion":"3.0.1","osVersion":"5.0","carrier":"Vodafone"}
+  UpdateSubscription:
+    type: object
+    required:
+      - uuid
+      - token
+      - platform
+    properties:
+      uuid:
+        type: string
+        description: Unique device Id.
+      token:
+        type: string
+        description: >-
+          The Apple or Google generated token used to deliver messages to the
+          APNs or GCM push networks respectively.
+      platform:
+        type: integer
+        description: >-
+          The type of device, 0 for iOS devices, 1 for Android devices, 2 for
+          Chrome users, 3 for firefox users.
+      tags:
+        type: array
+        items:
+          type: string
+        description: An array of the tags to which a device is currently subscribed.
+      tags_add:
+        type: array
+        items:
+          type: string
+      tags_remove:
+        type: array
+        items:
+          type: string
+      timeZone:
+        type: string
+        description: >-
+          The offset of the time zone from UTC, ignoring daylight savings time
+          e.g. 7200.
+      alias:
+        type: string
+        description: device alias or username.
+      countryCode:
+        type: integer
+        description: Country code to detect country generated by carrier.
+      badge:
+        type: integer
+        description: >-
+          is a number field representing the last known application badge for
+          iOS installations only.
+      debug:
+        type: boolean
+        description: Set debug mode for the device.
+      badge_p:
+        type: integer
+        description: >-
+          is a number field to be incremented to the badge for iOS installations
+          only.
+      badge_d:
+        type: integer
+        description: >-
+          is a number field to be substracted from the badge for iOS
+          installations only.
+      location:
+        type: array
+        description: 'device location [lat, lng].'
+        example:
+          - 50
+          - 30
+        items:
+          type: integer
+      metrics:
+        $ref: '#/definitions/DeviceData'
+        description: >-
+          Object with device data for better analytics tracking. e.g.
+          {"appVersion":"1.1","resolution":"396x240","deviceModel":"Android
+          5.0.0 - API 21 -
+          768x1280","locale":"en_US","PushBotslibVersion":"3.0.1","osVersion":"5.0","carrier":"Vodafone"}
+  DeviceData:
+    type: object
+    properties:
+      carrier:
+        type: string
+        example: Vodafone
+        description: device carrier e.g. Vodafone.
+      osVersion:
+        type: string
+        description: 9.1.2 for iOS/ 4.4.4 for Android.
+        example: 9.1.2
+      resolution:
+        type: string
+        example: 396x240
+      appVersion:
+        type: string
+        description: your application versioning for iOS AppStore or Google playstore.
+      locale:
+        type: string
+        example: en_US
+        description: device language
+      PushBotslibVersion:
+        type: string
+        description: Pushbots library version used in library
+      jailbroken:
+        type: boolean
+        description: If the device is jailbroken or no
+  PushDevice:
+    type: object
+    required:
+      - msg
+      - token
+      - platform
+    properties:
+      msg:
+        type: string
+        description: Notification message
+      token:
+        type: string
+        description: >-
+          The Apple or Google generated token used to deliver messages to the
+          APNs or GCM push networks respectively.
+      platform:
+        type: integer
+        description: >-
+          The type of device, 0 for iOS devices, 1 for Android devices, 2 for
+          Chrome users, 3 for firefox users.
+      sound:
+        type: string
+        description: Notification sound
+      badge:
+        type: integer
+        description: Notification badge for iOS only e.g. "+1"
+      payload:
+        example: {}
+        description: 'Notification payload .. Type: JSON'
+  PushBatchDevices:
+    type: object
+    required:
+      - msg
+      - platform
+    properties:
+      msg:
+        type: string
+        description: Notification message
+      platform:
+        type: array
+        items:
+          type: integer
+        description: >-
+          Array with the type of device, 0 for iOS devices, 1 for Android
+          devices, 2 for Chrome users, 3 for firefox users.
+      sound:
+        type: string
+        description: Notification sound
+      badge:
+        type: integer
+        description: Notification badge for iOS only e.g. "+1"
+      alias:
+        type: string
+        description: >-
+          alias to access device data without tokens and it must be unique for
+          every app e.g. username ,email ..etc
+      tags:
+        type: array
+        items:
+          type: string
+        description: Send notifications by tags
+      payload:
+        example: {}
+        description: 'Notification payload .. Type: JSON'
+  CreateApp:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+        description: 'Application title, must be unique.'
